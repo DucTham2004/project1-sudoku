@@ -1,3 +1,6 @@
+#include <SFML/Graphics.hpp> // Nếu bạn sử dụng các đối tượng như sf::RenderWindow, sf::RectangleShape
+#include <SFML/Window.hpp>   // Nếu bạn sử dụng các đối tượng về cửa sổ hoặc event
+#include <SFML/System.hpp>   // Nếu bạn dùng các chức năng hệ thống như sf::Clock, sf::Time
 #include "Game.hpp"
 #include "Grid.hpp"
 
