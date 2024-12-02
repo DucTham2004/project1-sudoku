@@ -1,13 +1,17 @@
 #include "Input.hpp"
 #include "Grid.hpp"
 
+const int cellSize = 50;
+const int offsetX = 175;
+const int offsetY = 75;
+
 void Input::processMouse(sf::RenderWindow &window, Grid &grid)
 {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        int row = mousePos.y / cellSize; // cellSize: kích thước 1 ô
-        int col = mousePos.x / cellSize;
+        int row = (mousePos.y - offsetY) / cellSize; // cellSize: kích thước 1 ô
+        int col = (mousePos.x - offsetX) / cellSize;
 
         // Kiểm tra nếu click trong lưới
         if (row >= 0 && row < 9 && col >= 0 && col < 9)

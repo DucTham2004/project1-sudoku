@@ -1,8 +1,4 @@
-#include <SFML/Graphics.hpp> // Nếu bạn sử dụng các đối tượng như sf::RenderWindow, sf::RectangleShape
-#include <SFML/Window.hpp>   // Nếu bạn sử dụng các đối tượng về cửa sổ hoặc event
-#include <SFML/System.hpp>   // Nếu bạn dùng các chức năng hệ thống như sf::Clock, sf::Time
 #include "Game.hpp"
-#include "Grid.hpp"
 
 Game::Game() {}
 
@@ -18,9 +14,12 @@ void Game::run()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
-        window.clear();
+        input.processMouse(window, grid);
+        input.processKeyboard(grid);
+        grid.generate();
+        window.clear(sf::Color::White);
         grid.draw(window);
+
         window.display();
     }
 }

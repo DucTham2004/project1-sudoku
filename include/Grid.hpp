@@ -15,10 +15,14 @@ public:
     int getValue(int row, int col) const;        // Lấy giá trị của một ô
     void print() const;                          // In lưới ra console (debug)
     void draw(sf::RenderWindow &window);
+    void selectCell(int row, int col);
+    void setCellValue(int value);
 
 private:
     std::vector<std::vector<int>> grid;
     bool isSafe(int row, int col, int num); // Kiểm tra an toàn khi điền số
+    int selectedRow = -1;                   // Hàng được chọn
+    int selectedCol = -1;                   // Cột được chọn
 };
 
 #endif
