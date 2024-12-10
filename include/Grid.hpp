@@ -15,7 +15,7 @@ public:
     std::vector<std::vector<int>> grid;
     std::vector<std::vector<bool>> isEditable;
     Grid();                                      // Khởi tạo lưới rỗng
-    void generate();                             // Tạo một lưới Sudoku mới
+    void generate(int cellsToRemove);            // Tạo một lưới Sudoku mới
     bool isValidMove(int row, int col, int num); // Kiểm tra xem bước đi hợp lệ không
     void setValue(int row, int col, int value);  // Đặt giá trị cho một ô
     int getValue(int row, int col) const;        // Lấy giá trị của một ô

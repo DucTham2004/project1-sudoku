@@ -16,10 +16,12 @@ private:
     enum GameState
     {
         StartScreen,
+        DifficultySelection, // Trạng thái chọn mức độ khó
         Playing
     };
     GameState state;
     void drawStartScreen(sf::RenderWindow &window);
+    void drawDifficultySelection(sf::RenderWindow &window);
 
 public:
     Game();

@@ -41,13 +41,12 @@ bool Grid::fillGrid()
     return true;
 }
 
-void Grid::generate()
+void Grid::generate(int cellsToRemove)
 {
     // Tạo lưới Sudoku hoàn chỉnh
     fillGrid();
 
     // Xóa ngẫu nhiên các ô để tạo bài Sudoku chưa hoàn chỉnh
-    int cellsToRemove = 40; // Số ô muốn xóa
     std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_int_distribution<int> distribution(0, 8);
 
@@ -56,7 +55,7 @@ void Grid::generate()
         int row = distribution(generator);
         int col = distribution(generator);
 
-        if (grid[row][col] != 0)
+        if (grid[row][col] != 0) // Chỉ xóa ô nếu nó chưa bị xóa
         {
             grid[row][col] = 0;
             isEditable[row][col] = true;
@@ -64,13 +63,14 @@ void Grid::generate()
         }
     }
 
+    // Cập nhật lại vector isEditable cho các ô cố định
     for (int i = 0; i < 9; ++i)
     {
         for (int j = 0; j < 9; ++j)
         {
             if (grid[i][j] != 0)
             {
-                isEditable[i][j] = false;
+                isEditable[i][j] = false; // Các ô cố định không thể chỉnh sửa
             }
         }
     }
