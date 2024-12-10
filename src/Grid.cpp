@@ -114,34 +114,31 @@ void Grid::draw(sf::RenderWindow &window)
     cell.setOutlineColor(sf::Color::Black);
     cell.setOutlineThickness(1);
 
-    // Tải font chữ một lần
     sf::Font font;
     if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
-        return; // Nếu không tải được font, thoát khỏi hàm
+        return;
     }
 
-    // Tính toán vị trí bắt đầu của lưới để căn giữa
-    float offsetX = (800 - 450) / 2; // Tính toán khoảng cách để căn giữa theo chiều ngang
-    float offsetY = (600 - 450) / 2; // Tính toán khoảng cách để căn giữa theo chiều dọc
+    float offsetX = (800 - 450) / 2;
+    float offsetY = (600 - 450) / 2;
 
     for (int i = 0; i < 9; ++i)
     {
         for (int j = 0; j < 9; ++j)
         {
-            // Đặt vị trí các ô trong lưới để căn giữa
+
             cell.setPosition(offsetX + j * 50, offsetY + i * 50);
 
             window.draw(cell);
 
-            // Hiển thị số trong lưới
             if (grid[i][j] != 0)
             {
                 if (!isEditable[i][j])
                 {
-                    sf::Text number(std::to_string(grid[i][j]), font, 30);           // Đặt kích thước chữ lớn hơn
-                    number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6); // Điều chỉnh vị trí
+                    sf::Text number(std::to_string(grid[i][j]), font, 30);
+                    number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6);
                     number.setFillColor(sf::Color::Black);
                     window.draw(number);
                 }
@@ -151,7 +148,7 @@ void Grid::draw(sf::RenderWindow &window)
                     {
                         sf::Text number(std::to_string(grid[i][j]), font, 30);           // Đặt kích thước chữ lớn hơn
                         number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6); // Điều chỉnh vị trí
-                        number.setFillColor(sf::Color::Black);
+                        number.setFillColor(sf::Color::Blue);
                         window.draw(number);
                     }
                     else
