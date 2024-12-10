@@ -76,33 +76,6 @@ void Grid::generate(int cellsToRemove)
     }
 }
 
-bool Grid::isValidMove(int row, int col, int num)
-{
-    return grid[row][col] == 0 && isSafe(row, col, num);
-}
-
-void Grid::setValue(int row, int col, int value)
-{
-    grid[row][col] = value;
-}
-
-int Grid::getValue(int row, int col) const
-{
-    return grid[row][col];
-}
-
-void Grid::print() const
-{
-    for (const auto &row : grid)
-    {
-        for (int cell : row)
-        {
-            std::cout << (cell == 0 ? "." : std::to_string(cell)) << " ";
-        }
-        std::cout << "\n";
-    }
-}
-
 bool Grid::isSafe(int row, int col, int num)
 {
     // Kiểm tra hàng
@@ -245,12 +218,6 @@ void Grid::setCellValue(int value)
         if (isEditable[selectedRow][selectedCol])
         {
             grid[selectedRow][selectedCol] = value;
-
-            // Kiểm tra chiến thắng sau khi đặt giá trị
-            if (checkWin())
-            {
-                std::cout << "Congratulations! You've won the game!" << std::endl;
-            }
         }
     }
 }

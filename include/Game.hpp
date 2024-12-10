@@ -16,7 +16,7 @@ public:
     enum GameState
     {
         StartScreen,
-        DifficultySelection, // Trạng thái chọn mức độ khó
+        DifficultySelection,
         Playing,
         CongratulationScreen
     };
