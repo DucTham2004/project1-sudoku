@@ -4,6 +4,8 @@ Game::Game() {}
 
 void Game::run()
 {
+    grid.generate();
+
     sf::RenderWindow window(sf::VideoMode(800, 600), "Sudoku");
 
     while (window.isOpen())
@@ -16,7 +18,6 @@ void Game::run()
         }
         input.processMouse(window, grid);
         input.processKeyboard(grid);
-        grid.generate();
         window.clear(sf::Color::White);
         grid.draw(window);
 

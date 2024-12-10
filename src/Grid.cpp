@@ -1,23 +1,80 @@
 #include "Grid.hpp"
-#include <iostream>
 
-Grid::Grid() : grid(9, std::vector<int>(9, 0)) {}
+Grid::Grid()
+    : grid(9, std::vector<int>(9, 0)),
+      isEditable(9, std::vector<bool>(9, false)) // Khởi tạo isEditable
+{
+}
+
+bool Grid::fillGrid()
+{
+    for (int row = 0; row < 9; ++row)
+    {
+        for (int col = 0; col < 9; ++col)
+        {
+            if (grid[row][col] == 0)
+            {
+                std::vector<int> numbers{1, 2, 3, 4, 5, 6, 7, 8, 9};
+                std::shuffle(numbers.begin(), numbers.end(), std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count()));
+
+                for (int num : numbers)
+                {
+                    if (isSafe(row, col, num))
+                    {
+                        grid[row][col] = num;
+
+                        if (fillGrid())
+                        {
+                            return true;
+                        }
+
+                        grid[row][col] = 0;
+                    }
+                }
+
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
 
 void Grid::generate()
 {
-    // Tạo lưới Sudoku cơ bản (tạm thời có thể tạo lưới tĩnh)
-    grid = {
-        {5, 3, 0, 0, 7, 0, 0, 0, 0},
-        {6, 0, 0, 1, 9, 5, 0, 0, 0},
-        {0, 9, 8, 0, 0, 0, 0, 6, 0},
-        {8, 0, 0, 0, 6, 0, 0, 0, 3},
-        {4, 0, 0, 8, 0, 3, 0, 0, 1},
-        {7, 0, 0, 0, 2, 0, 0, 0, 6},
-        {0, 6, 0, 0, 0, 0, 2, 8, 0},
-        {0, 0, 0, 4, 1, 9, 0, 0, 5},
-        {0, 0, 0, 0, 8, 0, 0, 7, 9}};
-}
+    // Tạo lưới Sudoku hoàn chỉnh
+    fillGrid();
 
+    // Xóa ngẫu nhiên các ô để tạo bài Sudoku chưa hoàn chỉnh
+    int cellsToRemove = 40; // Số ô muốn xóa
+    std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
+    std::uniform_int_distribution<int> distribution(0, 8);
+
+    while (cellsToRemove > 0)
+    {
+        int row = distribution(generator);
+        int col = distribution(generator);
+
+        if (grid[row][col] != 0) // Chỉ xóa ô nếu nó chưa bị xóa
+        {
+            grid[row][col] = 0;
+            isEditable[row][col] = true;
+            cellsToRemove--;
+        }
+    }
+
+    // Cập nhật lại vector isEditable cho các ô cố định
+    for (int i = 0; i < 9; ++i)
+    {
+        for (int j = 0; j < 9; ++j)
+        {
+            if (grid[i][j] != 0)
+            {
+                isEditable[i][j] = false; // Các ô cố định không thể chỉnh sửa
+            }
+        }
+    }
+}
 bool Grid::isValidMove(int row, int col, int num)
 {
     return grid[row][col] == 0 && isSafe(row, col, num);
@@ -99,10 +156,30 @@ void Grid::draw(sf::RenderWindow &window)
             // Hiển thị số trong lưới
             if (grid[i][j] != 0)
             {
-                sf::Text number(std::to_string(grid[i][j]), font, 30);           // Đặt kích thước chữ lớn hơn
-                number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6); // Điều chỉnh vị trí
-                number.setFillColor(sf::Color::Black);
-                window.draw(number);
+                if (!isEditable[i][j])
+                {
+                    sf::Text number(std::to_string(grid[i][j]), font, 30);           // Đặt kích thước chữ lớn hơn
+                    number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6); // Điều chỉnh vị trí
+                    number.setFillColor(sf::Color::Black);
+                    window.draw(number);
+                }
+                else
+                {
+                    if (isSafe(i, j, grid[i][j]))
+                    {
+                        sf::Text number(std::to_string(grid[i][j]), font, 30);           // Đặt kích thước chữ lớn hơn
+                        number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6); // Điều chỉnh vị trí
+                        number.setFillColor(sf::Color::Black);
+                        window.draw(number);
+                    }
+                    else
+                    {
+                        sf::Text number(std::to_string(grid[i][j]), font, 30);           // Đặt kích thước chữ lớn hơn
+                        number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6); // Điều chỉnh vị trí
+                        number.setFillColor(sf::Color::Red);
+                        window.draw(number);
+                    }
+                }
             }
         }
     }
@@ -154,9 +231,10 @@ void Grid::selectCell(int row, int col)
 
 void Grid::setCellValue(int value)
 {
+
     if (selectedRow >= 0 && selectedRow < 9 && selectedCol >= 0 && selectedCol < 9)
     {
-        if (grid[selectedRow][selectedCol] == 0)
+        if (isEditable[selectedRow][selectedCol])
             grid[selectedRow][selectedCol] = value;
     }
 }

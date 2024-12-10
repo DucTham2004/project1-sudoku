@@ -10,13 +10,12 @@ void Input::processMouse(sf::RenderWindow &window, Grid &grid)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        int row = (mousePos.y - offsetY) / cellSize; // cellSize: kích thước 1 ô
+        int row = (mousePos.y - offsetY) / cellSize;
         int col = (mousePos.x - offsetX) / cellSize;
 
-        // Kiểm tra nếu click trong lưới
         if (row >= 0 && row < 9 && col >= 0 && col < 9)
         {
-            grid.selectCell(row, col); // Chọn ô (giả sử có hàm selectCell trong Grid)
+            grid.selectCell(row, col);
         }
     }
 }
@@ -25,7 +24,42 @@ void Input::processKeyboard(Grid &grid)
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
     {
-        grid.setCellValue(1); // Đặt giá trị 1 vào ô được chọn
+        grid.setCellValue(1);
     }
-    // Tương tự cho các phím từ Num2 đến Num9
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+    {
+        grid.setCellValue(2);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+    {
+        grid.setCellValue(3);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+    {
+        grid.setCellValue(4);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
+    {
+        grid.setCellValue(5);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
+    {
+        grid.setCellValue(6);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
+    {
+        grid.setCellValue(7);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
+    {
+        grid.setCellValue(8);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9))
+    {
+        grid.setCellValue(9);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
+    {
+        grid.setCellValue(0);
+    }
 }
