@@ -13,6 +13,13 @@ class Game
 private:
     Grid grid;
     Input input;
+    enum GameState
+    {
+        StartScreen,
+        Playing
+    };
+    GameState state;
+    void drawStartScreen(sf::RenderWindow &window);
 
 public:
     Game();

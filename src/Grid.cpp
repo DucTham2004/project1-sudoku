@@ -1,3 +1,4 @@
+#include "Game.hpp"
 #include "Grid.hpp"
 
 Grid::Grid()
@@ -55,7 +56,7 @@ void Grid::generate()
         int row = distribution(generator);
         int col = distribution(generator);
 
-        if (grid[row][col] != 0) // Chỉ xóa ô nếu nó chưa bị xóa
+        if (grid[row][col] != 0)
         {
             grid[row][col] = 0;
             isEditable[row][col] = true;
@@ -63,18 +64,18 @@ void Grid::generate()
         }
     }
 
-    // Cập nhật lại vector isEditable cho các ô cố định
     for (int i = 0; i < 9; ++i)
     {
         for (int j = 0; j < 9; ++j)
         {
             if (grid[i][j] != 0)
             {
-                isEditable[i][j] = false; // Các ô cố định không thể chỉnh sửa
+                isEditable[i][j] = false;
             }
         }
     }
 }
+
 bool Grid::isValidMove(int row, int col, int num)
 {
     return grid[row][col] == 0 && isSafe(row, col, num);
@@ -105,22 +106,30 @@ void Grid::print() const
 bool Grid::isSafe(int row, int col, int num)
 {
     // Kiểm tra hàng
-    for (int i = 0; i < 9; i++)
-        if (grid[row][i] == num)
+    for (int i = 0; i < 9; ++i)
+    {
+        if (i != col && grid[row][i] == num) // Bỏ qua ô hiện tại
             return false;
+    }
 
     // Kiểm tra cột
-    for (int i = 0; i < 9; i++)
-        if (grid[i][col] == num)
+    for (int i = 0; i < 9; ++i)
+    {
+        if (i != row && grid[i][col] == num) // Bỏ qua ô hiện tại
             return false;
+    }
 
     // Kiểm tra ô vuông 3x3
     int startRow = row / 3 * 3;
     int startCol = col / 3 * 3;
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            if (grid[startRow + i][startCol + j] == num)
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            if ((startRow + i != row || startCol + j != col) && grid[startRow + i][startCol + j] == num)
                 return false;
+        }
+    }
 
     return true;
 }
