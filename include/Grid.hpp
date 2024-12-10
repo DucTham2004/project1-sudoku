@@ -24,9 +24,10 @@ public:
     void selectCell(int row, int col);
     void setCellValue(int value);
     bool fillGrid();
-    bool isSafe(int row, int col, int num); // Kiểm tra an toàn khi điền số
-    int selectedRow = -1;                   // Hàng được chọn
-    int selectedCol = -1;                   // Cột được chọn
+    bool isSafe(int row, int col, int num);
+    bool checkWin();
+    int selectedRow = -1; // Hàng được chọn
+    int selectedCol = -1; // Cột được chọn
 };
 
 #endif

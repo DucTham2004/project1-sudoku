@@ -10,20 +10,21 @@
 
 class Game
 {
-private:
+public:
     Grid grid;
     Input input;
     enum GameState
     {
         StartScreen,
         DifficultySelection, // Trạng thái chọn mức độ khó
-        Playing
+        Playing,
+        CongratulationScreen
     };
     GameState state;
     void drawStartScreen(sf::RenderWindow &window);
     void drawDifficultySelection(sf::RenderWindow &window);
+    void drawCongratulationScreen(sf::RenderWindow &window);
 
-public:
     Game();
     void run();
 };
