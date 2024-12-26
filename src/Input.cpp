@@ -1,5 +1,4 @@
 #include "Input.hpp"
-#include "Grid.hpp"
 
 const int cellSize = 50;
 const int offsetX = 175;
