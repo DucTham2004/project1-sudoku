@@ -22,8 +22,10 @@ public:
     bool fillGrid();
     bool isSafe(int row, int col, int num);
     bool checkWin();
+    bool checkLose();
     int selectedRow = -1;
     int selectedCol = -1;
+    int numberError = 0;
 };
 
 #endif

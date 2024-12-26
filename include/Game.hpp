@@ -18,13 +18,14 @@ public:
         StartScreen,
         DifficultySelection,
         Playing,
-        CongratulationScreen
+        CongratulationScreen,
+        LoseScreen
     };
     GameState state;
     void drawStartScreen(sf::RenderWindow &window);
     void drawDifficultySelection(sf::RenderWindow &window);
     void drawCongratulationScreen(sf::RenderWindow &window);
-
+    void drawLoseScreen(sf::RenderWindow &window);
     Game();
     void run();
 };

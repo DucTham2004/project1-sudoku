@@ -3,7 +3,7 @@
 
 Grid::Grid()
     : grid(9, std::vector<int>(9, 0)),
-      isEditable(9, std::vector<bool>(9, false)) // Khởi tạo isEditable
+      isEditable(9, std::vector<bool>(9, false))
 {
 }
 
@@ -43,10 +43,9 @@ bool Grid::fillGrid()
 
 void Grid::generate(int cellsToRemove)
 {
-    // Tạo lưới Sudoku hoàn chỉnh
+
     fillGrid();
 
-    // Xóa ngẫu nhiên các ô để tạo bài Sudoku chưa hoàn chỉnh
     std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_int_distribution<int> distribution(0, 8);
 
@@ -55,7 +54,7 @@ void Grid::generate(int cellsToRemove)
         int row = distribution(generator);
         int col = distribution(generator);
 
-        if (grid[row][col] != 0) // Chỉ xóa ô nếu nó chưa bị xóa
+        if (grid[row][col] != 0)
         {
             grid[row][col] = 0;
             isEditable[row][col] = true;
@@ -63,14 +62,13 @@ void Grid::generate(int cellsToRemove)
         }
     }
 
-    // Cập nhật lại vector isEditable cho các ô cố định
     for (int i = 0; i < 9; ++i)
     {
         for (int j = 0; j < 9; ++j)
         {
             if (grid[i][j] != 0)
             {
-                isEditable[i][j] = false; // Các ô cố định không thể chỉnh sửa
+                isEditable[i][j] = false;
             }
         }
     }
@@ -78,21 +76,19 @@ void Grid::generate(int cellsToRemove)
 
 bool Grid::isSafe(int row, int col, int num)
 {
-    // Kiểm tra hàng
+
     for (int i = 0; i < 9; ++i)
     {
-        if (i != col && grid[row][i] == num) // Bỏ qua ô hiện tại
+        if (i != col && grid[row][i] == num)
             return false;
     }
 
-    // Kiểm tra cột
     for (int i = 0; i < 9; ++i)
     {
-        if (i != row && grid[i][col] == num) // Bỏ qua ô hiện tại
+        if (i != row && grid[i][col] == num)
             return false;
     }
 
-    // Kiểm tra ô vuông 3x3
     int startRow = row / 3 * 3;
     int startCol = col / 3 * 3;
     for (int i = 0; i < 3; ++i)
@@ -146,15 +142,15 @@ void Grid::draw(sf::RenderWindow &window)
                 {
                     if (isSafe(i, j, grid[i][j]))
                     {
-                        sf::Text number(std::to_string(grid[i][j]), font, 30);           // Đặt kích thước chữ lớn hơn
-                        number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6); // Điều chỉnh vị trí
+                        sf::Text number(std::to_string(grid[i][j]), font, 30);
+                        number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6);
                         number.setFillColor(sf::Color::Blue);
                         window.draw(number);
                     }
                     else
                     {
-                        sf::Text number(std::to_string(grid[i][j]), font, 30);           // Đặt kích thước chữ lớn hơn
-                        number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6); // Điều chỉnh vị trí
+                        sf::Text number(std::to_string(grid[i][j]), font, 30);
+                        number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6);
                         number.setFillColor(sf::Color::Red);
                         window.draw(number);
                     }
@@ -170,8 +166,8 @@ void Grid::draw(sf::RenderWindow &window)
         if (i % 3 == 0)
         {
 
-            lineRow.setPosition(offsetX, offsetY + i * 50); // Đặt vị trí của đoạn thẳng
-            window.draw(lineRow);                           // Vẽ đoạn thẳng
+            lineRow.setPosition(offsetX, offsetY + i * 50);
+            window.draw(lineRow);
         }
     }
 
@@ -182,12 +178,11 @@ void Grid::draw(sf::RenderWindow &window)
         if (i % 3 == 0)
         {
 
-            lineCol.setPosition(offsetX + i * 50, offsetY); // Đặt vị trí của đoạn thẳng
-            window.draw(lineCol);                           // Vẽ đoạn thẳng
+            lineCol.setPosition(offsetX + i * 50, offsetY);
+            window.draw(lineCol);
         }
     }
 
-    // Vẽ ô được chọn
     if (selectedRow != -1 && selectedCol != -1)
     {
         sf::RectangleShape highlight(sf::Vector2f(50, 50));
@@ -197,6 +192,11 @@ void Grid::draw(sf::RenderWindow &window)
         highlight.setOutlineThickness(3);
         window.draw(highlight);
     }
+
+    sf::Text numberEr(("Error:" + std::to_string(numberError) + "/3"), font, 16);
+    numberEr.setPosition(400, 50);
+    numberEr.setFillColor(sf::Color::Black);
+    window.draw(numberEr);
 }
 
 void Grid::selectCell(int row, int col)
@@ -214,6 +214,10 @@ void Grid::setCellValue(int value)
     {
         if (isEditable[selectedRow][selectedCol])
         {
+            if (!isSafe(selectedRow, selectedCol, value) && value != grid[selectedRow][selectedCol])
+            {
+                numberError++;
+            }
             grid[selectedRow][selectedCol] = value;
         }
     }
@@ -221,7 +225,6 @@ void Grid::setCellValue(int value)
 
 bool Grid::checkWin()
 {
-    // Kiểm tra tất cả các hàng
     for (int i = 0; i < 9; ++i)
     {
         std::vector<bool> rowCheck(9, false);
@@ -233,7 +236,6 @@ bool Grid::checkWin()
         }
     }
 
-    // Kiểm tra tất cả các cột
     for (int j = 0; j < 9; ++j)
     {
         std::vector<bool> colCheck(9, false);
@@ -245,7 +247,6 @@ bool Grid::checkWin()
         }
     }
 
-    // Kiểm tra tất cả các ô vuông 3x3
     for (int blockRow = 0; blockRow < 3; ++blockRow)
     {
         for (int blockCol = 0; blockCol < 3; ++blockCol)
@@ -263,7 +264,13 @@ bool Grid::checkWin()
             }
         }
     }
-
-    // Nếu tất cả đều hợp lệ
     return true;
+}
+
+bool Grid::checkLose()
+{
+    if (numberError == 3)
+        return true;
+    else
+        return false;
 }

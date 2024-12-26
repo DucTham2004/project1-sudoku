@@ -44,7 +44,30 @@ void Game::run()
             {
                 state = CongratulationScreen;
             }
+            else if (state == Playing && grid.checkLose())
+            {
+                state = LoseScreen;
+                grid.numberError = 0;
+            }
             else if (state == CongratulationScreen && event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Num1)
+                {
+                    grid.generate(20);
+                    state = Playing;
+                }
+                else if (event.key.code == sf::Keyboard::Num2)
+                {
+                    grid.generate(40);
+                    state = Playing;
+                }
+                else if (event.key.code == sf::Keyboard::Num3)
+                {
+                    grid.generate(60);
+                    state = Playing;
+                }
+            }
+            else if (state == LoseScreen && event.type == sf::Event::KeyPressed)
             {
                 if (event.key.code == sf::Keyboard::Num1)
                 {
@@ -78,6 +101,8 @@ void Game::run()
         }
         else if (state == CongratulationScreen)
             drawCongratulationScreen(window);
+        else if (state == LoseScreen)
+            drawLoseScreen(window);
 
         window.display();
     }
@@ -146,6 +171,37 @@ void Game::drawCongratulationScreen(sf::RenderWindow &window)
     }
 
     sf::Text title("Congratulations, you have won!", font, 50);
+    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
+    title.setFillColor(sf::Color::Black);
+    window.draw(title);
+
+    sf::Text easy("1. Easy", font, 30);
+    easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 200);
+    easy.setFillColor(sf::Color::Black);
+    window.draw(easy);
+
+    sf::Text medium("2. Medium", font, 30);
+    medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 250);
+    medium.setFillColor(sf::Color::Black);
+    window.draw(medium);
+
+    sf::Text hard("3. Hard", font, 30);
+    hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 300);
+    hard.setFillColor(sf::Color::Black);
+    window.draw(hard);
+}
+
+void Game::drawLoseScreen(sf::RenderWindow &window)
+{
+
+    sf::Font font;
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
+
+    sf::Text title("You lost!", font, 50);
     title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
     title.setFillColor(sf::Color::Black);
     window.draw(title);
