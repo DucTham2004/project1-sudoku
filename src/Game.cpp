@@ -26,7 +26,7 @@ void Game::run()
             {
                 if (event.key.code == sf::Keyboard::Num1)
                 {
-                    grid.generate(1);
+                    grid.generate(20);
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
@@ -43,11 +43,16 @@ void Game::run()
             else if (state == Playing && grid.checkWin())
             {
                 state = CongratulationScreen;
+                grid.numberError = 0;
+                grid.selectedCol = -1;
+                grid.selectedRow = -1;
             }
             else if (state == Playing && grid.checkLose())
             {
                 state = LoseScreen;
                 grid.numberError = 0;
+                grid.selectedCol = -1;
+                grid.selectedRow = -1;
             }
             else if (state == CongratulationScreen && event.type == sf::Event::KeyPressed)
             {

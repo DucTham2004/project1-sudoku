@@ -1,4 +1,4 @@
-
+#include "Game.hpp"
 #include "Grid.hpp"
 
 Grid::Grid()
@@ -127,6 +127,41 @@ void Grid::draw(sf::RenderWindow &window)
 
             cell.setPosition(offsetX + j * 50, offsetY + i * 50);
 
+            if (i == selectedRow && j == selectedCol)
+            {
+                cell.setFillColor(sf::Color(187, 222, 251, 255));
+            }
+            else if (selectedRow != -1 && selectedCol != -1 && grid[i][j] == grid[selectedRow][selectedCol] && grid[selectedRow][selectedCol] != 0)
+            {
+                if (i == selectedRow || j == selectedCol || (i / 3 == selectedRow / 3 && j / 3 == selectedCol / 3))
+                {
+                    if (!isSafe(selectedRow, selectedCol, grid[selectedRow][selectedCol]))
+                    {
+                        cell.setFillColor(sf::Color(247, 207, 214, 255));
+                    }
+                    else
+                    {
+                        cell.setFillColor(sf::Color(195, 215, 234, 255));
+                    }
+                }
+                else
+                {
+                    cell.setFillColor(sf::Color(195, 215, 234, 255));
+                }
+            }
+            else if (i == selectedRow || j == selectedCol)
+            {
+                cell.setFillColor(sf::Color(226, 235, 243, 255));
+            }
+            else if (i / 3 == selectedRow / 3 && j / 3 == selectedCol / 3)
+            {
+                cell.setFillColor(sf::Color(226, 235, 243, 255));
+            }
+            else
+            {
+                cell.setFillColor(sf::Color::White);
+            }
+
             window.draw(cell);
 
             if (grid[i][j] != 0)
@@ -181,16 +216,6 @@ void Grid::draw(sf::RenderWindow &window)
             lineCol.setPosition(offsetX + i * 50, offsetY);
             window.draw(lineCol);
         }
-    }
-
-    if (selectedRow != -1 && selectedCol != -1)
-    {
-        sf::RectangleShape highlight(sf::Vector2f(50, 50));
-        highlight.setPosition(offsetX + selectedCol * 50, offsetY + selectedRow * 50);
-        highlight.setFillColor(sf::Color::Transparent);
-        highlight.setOutlineColor(sf::Color::Red);
-        highlight.setOutlineThickness(3);
-        window.draw(highlight);
     }
 
     sf::Text numberEr(("Error:" + std::to_string(numberError) + "/3"), font, 16);
