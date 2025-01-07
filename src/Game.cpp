@@ -70,16 +70,19 @@ void Game::run()
                 if (event.key.code == sf::Keyboard::Num1)
                 {
                     grid.generate(20);
+                    gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
                     grid.generate(40);
+                    gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
                     grid.generate(60);
+                    gameClock.restart();
                     state = Playing;
                 }
             }
@@ -88,19 +91,27 @@ void Game::run()
                 if (event.key.code == sf::Keyboard::Num1)
                 {
                     grid.generate(20);
+                    gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
                     grid.generate(40);
+                    gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
                     grid.generate(60);
+                    gameClock.restart();
                     state = Playing;
                 }
             }
+        }
+
+        if (state == Playing)
+        {
+            elapsedTime = gameClock.getElapsedTime();
         }
 
         window.clear(sf::Color::White);
@@ -114,6 +125,7 @@ void Game::run()
             input.processMouse(window, grid);
             input.processKeyboard(grid);
             grid.draw(window);
+            drawTimer(window, elapsedTime);
         }
         else if (state == Pause)
         {
@@ -260,4 +272,26 @@ void Game::drawPauseScreen(sf::RenderWindow &window)
     resume.setPosition(800 / 2 - resume.getGlobalBounds().width / 2, 200);
     resume.setFillColor(sf::Color::Black);
     window.draw(resume);
+}
+
+void Game::drawTimer(sf::RenderWindow &window, sf::Time elapsedTime)
+{
+    sf::Font font;
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
+
+    int minutes = static_cast<int>(elapsedTime.asSeconds()) / 60;
+    int seconds = static_cast<int>(elapsedTime.asSeconds()) % 60;
+
+    std::ostringstream timerText;
+    timerText << "Time: " << minutes << ":" << (seconds < 10 ? "0" : "") << seconds;
+
+    sf::Text timer(timerText.str(), font, 30);
+    timer.setFillColor(sf::Color::Black);
+    timer.setPosition(10, 10);
+
+    window.draw(timer);
 }

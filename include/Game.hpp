@@ -7,6 +7,7 @@
 #include "Game.hpp"
 #include "Grid.hpp"
 #include "Input.hpp"
+#include <sstream>
 
 class Game
 {
@@ -30,6 +31,7 @@ public:
     void drawCongratulationScreen(sf::RenderWindow &window);
     void drawLoseScreen(sf::RenderWindow &window);
     void drawPauseScreen(sf::RenderWindow &window);
+    void drawTimer(sf::RenderWindow &window, sf::Time elapsedTime);
     Game();
     void run();
 };
