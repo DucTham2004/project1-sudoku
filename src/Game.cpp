@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game() : state(StartScreen), isPaused(false), totalPausedTime(sf::Time::Zero) {}
+Game::Game() : state(StartScreen), totalPausedTime(sf::Time::Zero) {}
 
 void Game::run()
 {
@@ -49,6 +49,7 @@ void Game::run()
                 grid.numberError = 0;
                 grid.selectedCol = -1;
                 grid.selectedRow = -1;
+                grid.currentScore = 0;
             }
             else if (state == Playing && grid.checkLose())
             {
@@ -56,6 +57,7 @@ void Game::run()
                 grid.numberError = 0;
                 grid.selectedCol = -1;
                 grid.selectedRow = -1;
+                grid.currentScore = 0;
             }
             else if (state == Playing && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
             {
@@ -125,6 +127,8 @@ void Game::run()
             input.processKeyboard(grid);
             grid.draw(window);
             drawTimer(window, elapsedTime);
+            drawScore(window);
+            drawNumberError(window);
         }
         else if (state == Pause)
         {
@@ -294,4 +298,42 @@ void Game::drawTimer(sf::RenderWindow &window, sf::Time elapsedTime)
     timer.setPosition(10, 10);
 
     window.draw(timer);
+}
+
+void Game::drawScore(sf::RenderWindow &window)
+{
+    sf::Font font;
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
+
+    sf::Text scoreText;
+    scoreText.setFont(font);
+    scoreText.setString("Score: " + std::to_string(grid.currentScore));
+    scoreText.setCharacterSize(30);
+    scoreText.setFillColor(sf::Color::Black);
+    scoreText.setPosition(200, 10);
+
+    window.draw(scoreText);
+}
+
+void Game::drawNumberError(sf::RenderWindow &window)
+{
+    sf::Font font;
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
+
+    sf::Text numberErrorText;
+    numberErrorText.setFont(font);
+    numberErrorText.setString("Eror: " + std::to_string(grid.numberError) + "/3");
+    numberErrorText.setCharacterSize(30);
+    numberErrorText.setFillColor(sf::Color::Black);
+    numberErrorText.setPosition(400, 10);
+
+    window.draw(numberErrorText);
 }

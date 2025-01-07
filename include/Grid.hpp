@@ -26,6 +26,7 @@ public:
     int selectedRow = -1;
     int selectedCol = -1;
     int numberError = 0;
+    int currentScore = 0;
 };
 
 #endif

@@ -217,11 +217,6 @@ void Grid::draw(sf::RenderWindow &window)
             window.draw(lineCol);
         }
     }
-
-    sf::Text numberEr(("Error:" + std::to_string(numberError) + "/3"), font, 16);
-    numberEr.setPosition(400, 50);
-    numberEr.setFillColor(sf::Color::Black);
-    window.draw(numberEr);
 }
 
 void Grid::selectCell(int row, int col)
@@ -242,6 +237,10 @@ void Grid::setCellValue(int value)
             if (!isSafe(selectedRow, selectedCol, value) && value != grid[selectedRow][selectedCol])
             {
                 numberError++;
+            }
+            else if (isSafe(selectedRow, selectedCol, value) && value != grid[selectedRow][selectedCol])
+            {
+                currentScore += 50;
             }
             grid[selectedRow][selectedCol] = value;
         }

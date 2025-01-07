@@ -18,7 +18,7 @@ public:
     sf::Time elapsedTime;
     sf::Time totalPausedTime;
     sf::Time pauseStartTime;
-    bool isPaused;
+
     enum GameState
     {
         StartScreen,
@@ -35,6 +35,8 @@ public:
     void drawLoseScreen(sf::RenderWindow &window);
     void drawPauseScreen(sf::RenderWindow &window);
     void drawTimer(sf::RenderWindow &window, sf::Time elapsedTime);
+    void drawScore(sf::RenderWindow &window);
+    void drawNumberError(sf::RenderWindow &window);
     Game();
     void run();
 };
