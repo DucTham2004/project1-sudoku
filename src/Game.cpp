@@ -27,16 +27,19 @@ void Game::run()
                 if (event.key.code == sf::Keyboard::Num1)
                 {
                     grid.generate(20);
+                    gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
                     grid.generate(40);
+                    gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
                     grid.generate(60);
+                    gameClock.restart();
                     state = Playing;
                 }
             }
@@ -53,6 +56,14 @@ void Game::run()
                 grid.numberError = 0;
                 grid.selectedCol = -1;
                 grid.selectedRow = -1;
+            }
+            else if (state == Playing && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
+            {
+                state = Pause;
+            }
+            else if (state == Pause && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
+            {
+                state = Playing;
             }
             else if (state == CongratulationScreen && event.type == sf::Event::KeyPressed)
             {
@@ -103,6 +114,10 @@ void Game::run()
             input.processMouse(window, grid);
             input.processKeyboard(grid);
             grid.draw(window);
+        }
+        else if (state == Pause)
+        {
+            drawPauseScreen(window);
         }
         else if (state == CongratulationScreen)
             drawCongratulationScreen(window);
@@ -225,4 +240,24 @@ void Game::drawLoseScreen(sf::RenderWindow &window)
     hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 300);
     hard.setFillColor(sf::Color::Black);
     window.draw(hard);
+}
+
+void Game::drawPauseScreen(sf::RenderWindow &window)
+{
+    sf::Font font;
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
+
+    sf::Text title("Game Paused", font, 50);
+    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
+    title.setFillColor(sf::Color::Black);
+    window.draw(title);
+
+    sf::Text resume("Press 'p' to Resume", font, 30);
+    resume.setPosition(800 / 2 - resume.getGlobalBounds().width / 2, 200);
+    resume.setFillColor(sf::Color::Black);
+    window.draw(resume);
 }

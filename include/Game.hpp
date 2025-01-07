@@ -13,11 +13,14 @@ class Game
 public:
     Grid grid;
     Input input;
+    sf::Clock gameClock;
+    sf::Time elapsedTime;
     enum GameState
     {
         StartScreen,
         DifficultySelection,
         Playing,
+        Pause,
         CongratulationScreen,
         LoseScreen
     };
@@ -26,6 +29,7 @@ public:
     void drawDifficultySelection(sf::RenderWindow &window);
     void drawCongratulationScreen(sf::RenderWindow &window);
     void drawLoseScreen(sf::RenderWindow &window);
+    void drawPauseScreen(sf::RenderWindow &window);
     Game();
     void run();
 };
