@@ -110,6 +110,8 @@ void Game::run()
                 }
             }
         }
+        if (state == Playing)
+            elapsedTime = gameClock.getElapsedTime() - totalPausedTime;
 
         window.clear(sf::Color::White);
 
@@ -122,12 +124,12 @@ void Game::run()
             input.processMouse(window, grid);
             input.processKeyboard(grid);
             grid.draw(window);
-            elapsedTime = gameClock.getElapsedTime() - totalPausedTime;
             drawTimer(window, elapsedTime);
         }
         else if (state == Pause)
         {
             drawPauseScreen(window);
+            drawTimer(window, elapsedTime);
         }
         else if (state == CongratulationScreen)
             drawCongratulationScreen(window);
