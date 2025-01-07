@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game() : state(StartScreen) {}
+Game::Game() : state(StartScreen), isPaused(false), totalPausedTime(sf::Time::Zero) {}
 
 void Game::run()
 {
@@ -59,10 +59,12 @@ void Game::run()
             }
             else if (state == Playing && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
             {
+                pauseStartTime = gameClock.getElapsedTime();
                 state = Pause;
             }
             else if (state == Pause && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
             {
+                totalPausedTime += gameClock.getElapsedTime() - pauseStartTime;
                 state = Playing;
             }
             else if (state == CongratulationScreen && event.type == sf::Event::KeyPressed)
@@ -109,11 +111,6 @@ void Game::run()
             }
         }
 
-        if (state == Playing)
-        {
-            elapsedTime = gameClock.getElapsedTime();
-        }
-
         window.clear(sf::Color::White);
 
         if (state == StartScreen)
@@ -125,6 +122,7 @@ void Game::run()
             input.processMouse(window, grid);
             input.processKeyboard(grid);
             grid.draw(window);
+            elapsedTime = gameClock.getElapsedTime() - totalPausedTime;
             drawTimer(window, elapsedTime);
         }
         else if (state == Pause)

@@ -16,6 +16,9 @@ public:
     Input input;
     sf::Clock gameClock;
     sf::Time elapsedTime;
+    sf::Time totalPausedTime;
+    sf::Time pauseStartTime;
+    bool isPaused;
     enum GameState
     {
         StartScreen,
