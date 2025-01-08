@@ -107,11 +107,11 @@ void Grid::draw(sf::RenderWindow &window)
 {
     sf::RectangleShape cell(sf::Vector2f(50, 50));
     cell.setFillColor(sf::Color::White);
-    cell.setOutlineColor(sf::Color::Black);
+    cell.setOutlineColor(sf::Color(52, 72, 97, 255));
     cell.setOutlineThickness(1);
 
     sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-Medium.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return;
@@ -168,23 +168,23 @@ void Grid::draw(sf::RenderWindow &window)
             {
                 if (!isEditable[i][j])
                 {
-                    sf::Text number(std::to_string(grid[i][j]), font, 30);
+                    sf::Text number(std::to_string(grid[i][j]), font, 36);
                     number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6);
-                    number.setFillColor(sf::Color::Black);
+                    number.setFillColor(sf::Color(52, 72, 97, 255));
                     window.draw(number);
                 }
                 else
                 {
                     if (isSafe(i, j, grid[i][j]))
                     {
-                        sf::Text number(std::to_string(grid[i][j]), font, 30);
+                        sf::Text number(std::to_string(grid[i][j]), font, 36);
                         number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6);
                         number.setFillColor(sf::Color::Blue);
                         window.draw(number);
                     }
                     else
                     {
-                        sf::Text number(std::to_string(grid[i][j]), font, 30);
+                        sf::Text number(std::to_string(grid[i][j]), font, 36);
                         number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6);
                         number.setFillColor(sf::Color::Red);
                         window.draw(number);
@@ -195,7 +195,7 @@ void Grid::draw(sf::RenderWindow &window)
             {
                 for (int note : notes[i][j])
                 {
-                    sf::Text number(std::to_string(note), font, 10);
+                    sf::Text number(std::to_string(note), font, 12);
                     number.setPosition(offsetX + j * 50 + 5 + (note - 1) % 3 * 15, offsetY + i * 50 + 5 + (note - 1) / 3 * 15);
                     number.setFillColor(sf::Color::Black);
                     window.draw(number);
@@ -205,7 +205,7 @@ void Grid::draw(sf::RenderWindow &window)
     }
 
     sf::RectangleShape lineRow(sf::Vector2f(450, 3));
-    lineRow.setFillColor(sf::Color::Black);
+    lineRow.setFillColor(sf::Color(77, 94, 116, 255));
     for (int i = 0; i <= 9; ++i)
     {
         if (i % 3 == 0)
@@ -217,7 +217,7 @@ void Grid::draw(sf::RenderWindow &window)
     }
 
     sf::RectangleShape lineCol(sf::Vector2f(3, 450));
-    lineCol.setFillColor(sf::Color::Black);
+    lineCol.setFillColor(sf::Color(77, 94, 116, 255));
     for (int i = 0; i <= 9; ++i)
     {
         if (i % 3 == 0)

@@ -21,6 +21,7 @@ public:
     sf::Time elapsedTime;
     sf::Time totalPausedTime;
     sf::Time pauseStartTime;
+    sf::Font font;
     struct Record
     {
         int score;
@@ -47,6 +48,8 @@ public:
     void drawTimer(sf::RenderWindow &window, sf::Time elapsedTime);
     void drawScore(sf::RenderWindow &window);
     void drawNumberError(sf::RenderWindow &window);
+    void drawShortcutKey(sf::RenderWindow &window);
+
     Game();
     void run();
     void addHighScore(int score, sf::Time playTime);

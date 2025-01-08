@@ -3,6 +3,11 @@
 Game::Game() : state(StartScreen), totalPausedTime(sf::Time::Zero)
 {
     loadHighScoresFromFile();
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
 }
 
 void Game::run()
@@ -34,18 +39,21 @@ void Game::run()
                 {
                     grid.generate(3);
                     gameClock.restart();
+                    totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
                     grid.generate(4);
                     gameClock.restart();
+                    totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
                     grid.generate(6);
                     gameClock.restart();
+                    totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
             }
@@ -83,18 +91,21 @@ void Game::run()
                 {
                     grid.generate(3);
                     gameClock.restart();
+                    totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
                     grid.generate(4);
                     gameClock.restart();
+                    totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
                     grid.generate(6);
                     gameClock.restart();
+                    totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
             }
@@ -104,24 +115,25 @@ void Game::run()
                 {
                     grid.generate(3);
                     gameClock.restart();
+                    totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
                     grid.generate(4);
                     gameClock.restart();
+                    totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
                     grid.generate(6);
                     gameClock.restart();
+                    totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
             }
         }
-        if (state == Playing)
-            elapsedTime = gameClock.getElapsedTime() - totalPausedTime;
 
         window.clear(sf::Color::White);
 
@@ -134,12 +146,14 @@ void Game::run()
             drawDifficultySelection(window);
         else if (state == Playing)
         {
+            elapsedTime = gameClock.getElapsedTime() - totalPausedTime;
             input.processMouse(window, grid);
             input.processKeyboard(grid);
             grid.draw(window);
             drawTimer(window, elapsedTime);
             drawScore(window);
             drawNumberError(window);
+            drawShortcutKey(window);
         }
         else if (state == Pause)
         {
@@ -166,19 +180,21 @@ void Game::run()
 void Game::drawStartScreen(sf::RenderWindow &window)
 {
     sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    sf::Font font2;
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return;
     }
+    font2.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf");
 
     sf::Text title("Welcome to Sudoku!", font, 50);
-    title.setFillColor(sf::Color::Black);
-    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 150);
+    title.setFillColor(sf::Color(52, 72, 97, 255));
+    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 10);
 
-    sf::Text instructions("Press Enter to Start", font, 30);
-    instructions.setFillColor(sf::Color::Black);
-    instructions.setPosition(800 / 2 - instructions.getGlobalBounds().width / 2, 300);
+    sf::Text instructions("Press Enter to Start", font2, 30);
+    instructions.setFillColor(sf::Color(52, 72, 97, 255));
+    instructions.setPosition(800 / 2 - instructions.getGlobalBounds().width / 2, 500);
 
     window.draw(title);
     window.draw(instructions);
@@ -186,32 +202,24 @@ void Game::drawStartScreen(sf::RenderWindow &window)
 
 void Game::drawDifficultySelection(sf::RenderWindow &window)
 {
-
-    sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
-    {
-        std::cerr << "Failed to load font!" << std::endl;
-        return;
-    }
-
     sf::Text title("Select Difficulty", font, 50);
     title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
-    title.setFillColor(sf::Color::Black);
+    title.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(title);
 
     sf::Text easy("1. Easy", font, 30);
     easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 400);
-    easy.setFillColor(sf::Color::Black);
+    easy.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(easy);
 
     sf::Text medium("2. Medium", font, 30);
     medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 450);
-    medium.setFillColor(sf::Color::Black);
+    medium.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(medium);
 
     sf::Text hard("3. Hard", font, 30);
     hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 500);
-    hard.setFillColor(sf::Color::Black);
+    hard.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(hard);
 }
 
@@ -219,7 +227,7 @@ void Game::drawCongratulationScreen(sf::RenderWindow &window)
 {
 
     sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return;
@@ -227,22 +235,22 @@ void Game::drawCongratulationScreen(sf::RenderWindow &window)
 
     sf::Text title("Congratulations, you have won!", font, 50);
     title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 30);
-    title.setFillColor(sf::Color::Black);
+    title.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(title);
 
     sf::Text easy("1. Easy", font, 30);
     easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 400);
-    easy.setFillColor(sf::Color::Black);
+    easy.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(easy);
 
     sf::Text medium("2. Medium", font, 30);
     medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 450);
-    medium.setFillColor(sf::Color::Black);
+    medium.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(medium);
 
     sf::Text hard("3. Hard", font, 30);
     hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 500);
-    hard.setFillColor(sf::Color::Black);
+    hard.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(hard);
 }
 
@@ -250,7 +258,7 @@ void Game::drawLoseScreen(sf::RenderWindow &window)
 {
 
     sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return;
@@ -258,29 +266,29 @@ void Game::drawLoseScreen(sf::RenderWindow &window)
 
     sf::Text title("You lost!", font, 50);
     title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 30);
-    title.setFillColor(sf::Color::Black);
+    title.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(title);
 
     sf::Text easy("1. Easy", font, 30);
     easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 400);
-    easy.setFillColor(sf::Color::Black);
+    easy.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(easy);
 
     sf::Text medium("2. Medium", font, 30);
     medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 450);
-    medium.setFillColor(sf::Color::Black);
+    medium.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(medium);
 
     sf::Text hard("3. Hard", font, 30);
     hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 500);
-    hard.setFillColor(sf::Color::Black);
+    hard.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(hard);
 }
 
 void Game::drawPauseScreen(sf::RenderWindow &window)
 {
     sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return;
@@ -288,19 +296,19 @@ void Game::drawPauseScreen(sf::RenderWindow &window)
 
     sf::Text title("Game Paused", font, 50);
     title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
-    title.setFillColor(sf::Color::Black);
+    title.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(title);
 
     sf::Text resume("Press 'p' to Resume", font, 30);
     resume.setPosition(800 / 2 - resume.getGlobalBounds().width / 2, 200);
-    resume.setFillColor(sf::Color::Black);
+    resume.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(resume);
 }
 
 void Game::drawTimer(sf::RenderWindow &window, sf::Time elapsedTime)
 {
     sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return;
@@ -312,8 +320,8 @@ void Game::drawTimer(sf::RenderWindow &window, sf::Time elapsedTime)
     std::ostringstream timerText;
     timerText << "Time: " << minutes << ":" << (seconds < 10 ? "0" : "") << seconds;
 
-    sf::Text timer(timerText.str(), font, 30);
-    timer.setFillColor(sf::Color::Black);
+    sf::Text timer(timerText.str(), font, 24);
+    timer.setFillColor(sf::Color(52, 72, 97, 255));
     timer.setPosition(10, 10);
 
     window.draw(timer);
@@ -322,7 +330,7 @@ void Game::drawTimer(sf::RenderWindow &window, sf::Time elapsedTime)
 void Game::drawScore(sf::RenderWindow &window)
 {
     sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return;
@@ -331,8 +339,8 @@ void Game::drawScore(sf::RenderWindow &window)
     sf::Text scoreText;
     scoreText.setFont(font);
     scoreText.setString("Score: " + std::to_string(grid.currentScore));
-    scoreText.setCharacterSize(30);
-    scoreText.setFillColor(sf::Color::Black);
+    scoreText.setCharacterSize(24);
+    scoreText.setFillColor(sf::Color(52, 72, 97, 255));
     scoreText.setPosition(200, 10);
 
     window.draw(scoreText);
@@ -341,7 +349,7 @@ void Game::drawScore(sf::RenderWindow &window)
 void Game::drawNumberError(sf::RenderWindow &window)
 {
     sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return;
@@ -350,8 +358,8 @@ void Game::drawNumberError(sf::RenderWindow &window)
     sf::Text numberErrorText;
     numberErrorText.setFont(font);
     numberErrorText.setString("Eror: " + std::to_string(grid.numberError) + "/3");
-    numberErrorText.setCharacterSize(30);
-    numberErrorText.setFillColor(sf::Color::Black);
+    numberErrorText.setCharacterSize(24);
+    numberErrorText.setFillColor(sf::Color(52, 72, 97, 255));
     numberErrorText.setPosition(400, 10);
 
     window.draw(numberErrorText);
@@ -372,7 +380,7 @@ void Game::addHighScore(int score, sf::Time playTime)
 void Game::drawHighScores(sf::RenderWindow &window)
 {
     sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return;
@@ -380,7 +388,7 @@ void Game::drawHighScores(sf::RenderWindow &window)
 
     sf::Text title("High Scores", font, 50);
     title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
-    title.setFillColor(sf::Color::Black);
+    title.setFillColor(sf::Color(52, 72, 97, 255));
     window.draw(title);
 
     for (int i = 0; i < highScores.size(); ++i)
@@ -389,7 +397,7 @@ void Game::drawHighScores(sf::RenderWindow &window)
         highScoreText << "Top " << i + 1 << ": " << highScores[i].score << " - " << round(highScores[i].playTime.asSeconds()) << "s";
 
         sf::Text highScore(highScoreText.str(), font, 30);
-        highScore.setFillColor(sf::Color::Black);
+        highScore.setFillColor(sf::Color(52, 72, 97, 255));
         highScore.setPosition(800 / 2 - highScore.getGlobalBounds().width / 2, 200 + i * 50);
         window.draw(highScore);
     }
@@ -433,4 +441,19 @@ void Game::loadHighScoresFromFile()
     }
 
     file.close();
+}
+
+void Game::drawShortcutKey(sf::RenderWindow &window)
+{
+    sf::Font font;
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
+
+    sf::Text title("Shortcut Key:        N: Note      P: Pause      Backspace: Delete", font, 24);
+    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 550);
+    title.setFillColor(sf::Color(52, 72, 97, 255));
+    window.draw(title);
 }
