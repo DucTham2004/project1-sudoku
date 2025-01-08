@@ -5,6 +5,11 @@ Grid::Grid()
     : grid(9, std::vector<int>(9, 0)),
       isEditable(9, std::vector<bool>(9, false))
 {
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
 }
 
 bool Grid::fillGrid()
@@ -109,13 +114,6 @@ void Grid::draw(sf::RenderWindow &window)
     cell.setFillColor(sf::Color::White);
     cell.setOutlineColor(sf::Color(52, 72, 97, 255));
     cell.setOutlineThickness(1);
-
-    sf::Font font;
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-Medium.ttf"))
-    {
-        std::cerr << "Failed to load font!" << std::endl;
-        return;
-    }
 
     float offsetX = (800 - 450) / 2;
     float offsetY = (600 - 450) / 2;

@@ -30,6 +30,7 @@ public:
     int selectedCol = -1;
     int numberError = 0;
     int currentScore = 0;
+    sf::Font font;
 };
 
 #endif
