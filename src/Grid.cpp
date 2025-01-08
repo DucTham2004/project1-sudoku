@@ -191,6 +191,16 @@ void Grid::draw(sf::RenderWindow &window)
                     }
                 }
             }
+            else
+            {
+                for (int note : notes[i][j])
+                {
+                    sf::Text number(std::to_string(note), font, 10);
+                    number.setPosition(offsetX + j * 50 + 5 + (note - 1) % 3 * 15, offsetY + i * 50 + 5 + (note - 1) / 3 * 15);
+                    number.setFillColor(sf::Color::Black);
+                    window.draw(number);
+                }
+            }
         }
     }
 
@@ -230,19 +240,35 @@ void Grid::selectCell(int row, int col)
 
 void Grid::setCellValue(int value)
 {
-    if (selectedRow >= 0 && selectedRow < 9 && selectedCol >= 0 && selectedCol < 9)
+    if (!isNoteMode)
     {
-        if (isEditable[selectedRow][selectedCol])
+        if (selectedRow >= 0 && selectedRow < 9 && selectedCol >= 0 && selectedCol < 9)
         {
-            if (!isSafe(selectedRow, selectedCol, value) && value != grid[selectedRow][selectedCol])
+            if (isEditable[selectedRow][selectedCol])
             {
-                numberError++;
+                notes[selectedRow][selectedCol].clear();
+                if (!isSafe(selectedRow, selectedCol, value) && value != grid[selectedRow][selectedCol])
+                {
+                    numberError++;
+                }
+                else if (isSafe(selectedRow, selectedCol, value) && value != grid[selectedRow][selectedCol])
+                {
+                    currentScore += 50;
+                }
+                grid[selectedRow][selectedCol] = value;
             }
-            else if (isSafe(selectedRow, selectedCol, value) && value != grid[selectedRow][selectedCol])
+        }
+    }
+    else
+    {
+        if (selectedRow >= 0 && selectedRow < 9 && selectedCol >= 0 && selectedCol < 9)
+        {
+            if (isEditable[selectedRow][selectedCol])
             {
-                currentScore += 50;
+                if (grid[selectedRow][selectedCol] != 0)
+                    grid[selectedRow][selectedCol] = 0;
+                notes[selectedRow][selectedCol].insert(value);
             }
-            grid[selectedRow][selectedCol] = value;
         }
     }
 }

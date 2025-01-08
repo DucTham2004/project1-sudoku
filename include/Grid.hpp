@@ -6,6 +6,7 @@
 #include <random>
 #include <chrono>
 #include <iostream>
+#include <set>
 
 #include <SFML/Graphics.hpp>
 
@@ -14,6 +15,8 @@ class Grid
 public:
     std::vector<std::vector<int>> grid;
     std::vector<std::vector<bool>> isEditable;
+    std::set<int> notes[9][9];
+    bool isNoteMode = false;
     Grid();
     void generate(int cellsToRemove);
     void draw(sf::RenderWindow &window);

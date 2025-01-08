@@ -60,5 +60,10 @@ void Input::processKeyboard(Grid &grid)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
     {
         grid.setCellValue(0);
+        grid.notes[grid.selectedRow][grid.selectedCol].clear();
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
+    {
+        grid.isNoteMode = !grid.isNoteMode;
     }
 }
