@@ -293,7 +293,7 @@ bool Grid::checkWin()
 
 bool Grid::checkLose()
 {
-    if (numberError == 3)
+    if (numberError >= 3)
         return true;
     else
         return false;

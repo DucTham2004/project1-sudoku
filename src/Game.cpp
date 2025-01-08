@@ -1,6 +1,9 @@
 #include "Game.hpp"
 
-Game::Game() : state(StartScreen), totalPausedTime(sf::Time::Zero) {}
+Game::Game() : state(StartScreen), totalPausedTime(sf::Time::Zero)
+{
+    loadHighScoresFromFile();
+}
 
 void Game::run()
 {
@@ -13,7 +16,10 @@ void Game::run()
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
+            {
+                saveHighScoresToFile();
                 window.close();
+            }
 
             if (state == StartScreen && event.type == sf::Event::KeyPressed)
             {
@@ -387,4 +393,44 @@ void Game::drawHighScores(sf::RenderWindow &window)
         highScore.setPosition(800 / 2 - highScore.getGlobalBounds().width / 2, 200 + i * 50);
         window.draw(highScore);
     }
+}
+
+void Game::saveHighScoresToFile()
+{
+    std::ofstream file("E:/project1_sudoku/project1-sudoku/assets/scores/highscores.txt");
+
+    if (!file.is_open())
+    {
+        std::cerr << "Failed to open file!" << std::endl;
+        return;
+    }
+
+    for (const auto &record : highScores)
+    {
+        file << record.score << " " << record.playTime.asSeconds() << std::endl;
+    }
+
+    file.close();
+}
+
+void Game::loadHighScoresFromFile()
+{
+    std::ifstream file("E:/project1_sudoku/project1-sudoku/assets/scores/highscores.txt");
+
+    if (!file.is_open())
+    {
+        std::cerr << "Failed to open file!" << std::endl;
+        return;
+    }
+
+    highScores.clear();
+
+    int score;
+    float playTime;
+    while (file >> score >> playTime)
+    {
+        highScores.push_back({score, sf::seconds(playTime)});
+    }
+
+    file.close();
 }

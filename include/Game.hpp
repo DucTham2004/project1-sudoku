@@ -10,6 +10,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 class Game
 {
@@ -50,6 +51,8 @@ public:
     void run();
     void addHighScore(int score, sf::Time playTime);
     void drawHighScores(sf::RenderWindow &window);
+    void saveHighScoresToFile();
+    void loadHighScoresFromFile();
 };
 
 #endif
