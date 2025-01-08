@@ -26,19 +26,19 @@ void Game::run()
             {
                 if (event.key.code == sf::Keyboard::Num1)
                 {
-                    grid.generate(20);
+                    grid.generate(3);
                     gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
-                    grid.generate(40);
+                    grid.generate(4);
                     gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
-                    grid.generate(60);
+                    grid.generate(6);
                     gameClock.restart();
                     state = Playing;
                 }
@@ -49,6 +49,7 @@ void Game::run()
                 grid.numberError = 0;
                 grid.selectedCol = -1;
                 grid.selectedRow = -1;
+                addHighScore(grid.currentScore, elapsedTime);
                 grid.currentScore = 0;
             }
             else if (state == Playing && grid.checkLose())
@@ -57,6 +58,7 @@ void Game::run()
                 grid.numberError = 0;
                 grid.selectedCol = -1;
                 grid.selectedRow = -1;
+                addHighScore(grid.currentScore, elapsedTime);
                 grid.currentScore = 0;
             }
             else if (state == Playing && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
@@ -73,19 +75,19 @@ void Game::run()
             {
                 if (event.key.code == sf::Keyboard::Num1)
                 {
-                    grid.generate(20);
+                    grid.generate(3);
                     gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
-                    grid.generate(40);
+                    grid.generate(4);
                     gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
-                    grid.generate(60);
+                    grid.generate(6);
                     gameClock.restart();
                     state = Playing;
                 }
@@ -94,19 +96,19 @@ void Game::run()
             {
                 if (event.key.code == sf::Keyboard::Num1)
                 {
-                    grid.generate(20);
+                    grid.generate(3);
                     gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
-                    grid.generate(40);
+                    grid.generate(4);
                     gameClock.restart();
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
-                    grid.generate(60);
+                    grid.generate(6);
                     gameClock.restart();
                     state = Playing;
                 }
@@ -118,7 +120,10 @@ void Game::run()
         window.clear(sf::Color::White);
 
         if (state == StartScreen)
+        {
             drawStartScreen(window);
+            drawHighScores(window);
+        }
         else if (state == DifficultySelection)
             drawDifficultySelection(window);
         else if (state == Playing)
@@ -134,11 +139,19 @@ void Game::run()
         {
             drawPauseScreen(window);
             drawTimer(window, elapsedTime);
+            drawScore(window);
+            drawNumberError(window);
         }
         else if (state == CongratulationScreen)
+        {
             drawCongratulationScreen(window);
+            drawHighScores(window);
+        }
         else if (state == LoseScreen)
+        {
             drawLoseScreen(window);
+            drawHighScores(window);
+        }
 
         window.display();
     }
@@ -181,17 +194,17 @@ void Game::drawDifficultySelection(sf::RenderWindow &window)
     window.draw(title);
 
     sf::Text easy("1. Easy", font, 30);
-    easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 200);
+    easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 400);
     easy.setFillColor(sf::Color::Black);
     window.draw(easy);
 
     sf::Text medium("2. Medium", font, 30);
-    medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 250);
+    medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 450);
     medium.setFillColor(sf::Color::Black);
     window.draw(medium);
 
     sf::Text hard("3. Hard", font, 30);
-    hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 300);
+    hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 500);
     hard.setFillColor(sf::Color::Black);
     window.draw(hard);
 }
@@ -207,22 +220,22 @@ void Game::drawCongratulationScreen(sf::RenderWindow &window)
     }
 
     sf::Text title("Congratulations, you have won!", font, 50);
-    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
+    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 30);
     title.setFillColor(sf::Color::Black);
     window.draw(title);
 
     sf::Text easy("1. Easy", font, 30);
-    easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 200);
+    easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 400);
     easy.setFillColor(sf::Color::Black);
     window.draw(easy);
 
     sf::Text medium("2. Medium", font, 30);
-    medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 250);
+    medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 450);
     medium.setFillColor(sf::Color::Black);
     window.draw(medium);
 
     sf::Text hard("3. Hard", font, 30);
-    hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 300);
+    hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 500);
     hard.setFillColor(sf::Color::Black);
     window.draw(hard);
 }
@@ -238,22 +251,22 @@ void Game::drawLoseScreen(sf::RenderWindow &window)
     }
 
     sf::Text title("You lost!", font, 50);
-    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
+    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 30);
     title.setFillColor(sf::Color::Black);
     window.draw(title);
 
     sf::Text easy("1. Easy", font, 30);
-    easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 200);
+    easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 400);
     easy.setFillColor(sf::Color::Black);
     window.draw(easy);
 
     sf::Text medium("2. Medium", font, 30);
-    medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 250);
+    medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 450);
     medium.setFillColor(sf::Color::Black);
     window.draw(medium);
 
     sf::Text hard("3. Hard", font, 30);
-    hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 300);
+    hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 500);
     hard.setFillColor(sf::Color::Black);
     window.draw(hard);
 }
@@ -336,4 +349,42 @@ void Game::drawNumberError(sf::RenderWindow &window)
     numberErrorText.setPosition(400, 10);
 
     window.draw(numberErrorText);
+}
+
+void Game::addHighScore(int score, sf::Time playTime)
+{
+
+    highScores.push_back({score, playTime});
+
+    std::sort(highScores.begin(), highScores.end(), [](const Record &a, const Record &b)
+              { return a.score > b.score; });
+
+    if (highScores.size() > 3)
+        highScores.pop_back();
+}
+
+void Game::drawHighScores(sf::RenderWindow &window)
+{
+    sf::Font font;
+    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/roboto-black.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
+
+    sf::Text title("High Scores", font, 50);
+    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
+    title.setFillColor(sf::Color::Black);
+    window.draw(title);
+
+    for (int i = 0; i < highScores.size(); ++i)
+    {
+        std::ostringstream highScoreText;
+        highScoreText << "Top " << i + 1 << ": " << highScores[i].score << " - " << round(highScores[i].playTime.asSeconds()) << "s";
+
+        sf::Text highScore(highScoreText.str(), font, 30);
+        highScore.setFillColor(sf::Color::Black);
+        highScore.setPosition(800 / 2 - highScore.getGlobalBounds().width / 2, 200 + i * 50);
+        window.draw(highScore);
+    }
 }

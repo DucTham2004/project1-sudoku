@@ -8,6 +8,8 @@
 #include "Grid.hpp"
 #include "Input.hpp"
 #include <sstream>
+#include <vector>
+#include <algorithm>
 
 class Game
 {
@@ -18,6 +20,13 @@ public:
     sf::Time elapsedTime;
     sf::Time totalPausedTime;
     sf::Time pauseStartTime;
+    struct Record
+    {
+        int score;
+        sf::Time playTime;
+    };
+
+    std::vector<Record> highScores;
 
     enum GameState
     {
@@ -39,6 +48,8 @@ public:
     void drawNumberError(sf::RenderWindow &window);
     Game();
     void run();
+    void addHighScore(int score, sf::Time playTime);
+    void drawHighScores(sf::RenderWindow &window);
 };
 
 #endif
