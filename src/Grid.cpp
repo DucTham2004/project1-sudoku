@@ -275,43 +275,13 @@ bool Grid::checkWin()
 {
     for (int i = 0; i < 9; ++i)
     {
-        std::vector<bool> rowCheck(9, false);
         for (int j = 0; j < 9; ++j)
         {
-            if (grid[i][j] == 0 || rowCheck[grid[i][j] - 1])
+            if (grid[i][j] == 0 || !isSafe(i, j, grid[i][j]))
                 return false;
-            rowCheck[grid[i][j] - 1] = true;
         }
     }
 
-    for (int j = 0; j < 9; ++j)
-    {
-        std::vector<bool> colCheck(9, false);
-        for (int i = 0; i < 9; ++i)
-        {
-            if (grid[i][j] == 0 || colCheck[grid[i][j] - 1])
-                return false;
-            colCheck[grid[i][j] - 1] = true;
-        }
-    }
-
-    for (int blockRow = 0; blockRow < 3; ++blockRow)
-    {
-        for (int blockCol = 0; blockCol < 3; ++blockCol)
-        {
-            std::vector<bool> boxCheck(9, false);
-            for (int i = 0; i < 3; ++i)
-            {
-                for (int j = 0; j < 3; ++j)
-                {
-                    int val = grid[blockRow * 3 + i][blockCol * 3 + j];
-                    if (val == 0 || boxCheck[val - 1])
-                        return false;
-                    boxCheck[val - 1] = true;
-                }
-            }
-        }
-    }
     return true;
 }
 
