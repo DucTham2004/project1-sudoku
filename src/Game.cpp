@@ -192,16 +192,11 @@ void Game::drawStartScreen(sf::RenderWindow &window)
     title.setFillColor(sf::Color::White);
     title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 60);
 
-    sf::Text subtitle("Challenge Your Mind", font, 36);
-    subtitle.setFillColor(sf::Color(52, 73, 94));
-    subtitle.setPosition(800 / 2 - subtitle.getGlobalBounds().width / 2, 250);
-
     sf::Text instructions("Press Enter to Start", font, 48);
     instructions.setFillColor(sf::Color(46, 204, 113));
-    instructions.setPosition(800 / 2 - instructions.getGlobalBounds().width / 2, 400);
+    instructions.setPosition(800 / 2 - instructions.getGlobalBounds().width / 2, 520);
 
     window.draw(title);
-    window.draw(subtitle);
     window.draw(instructions);
 }
 
@@ -246,32 +241,33 @@ void Game::drawCongratulationScreen(sf::RenderWindow &window)
     window.draw(background);
 
     sf::Text title("Congratulations!", font, 72);
-    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 80);
+    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 20);
     title.setFillColor(sf::Color(46, 139, 87));
     window.draw(title);
 
     sf::Text subtitle("You have completed the puzzle!", font, 36);
-    subtitle.setPosition(800 / 2 - subtitle.getGlobalBounds().width / 2, 180);
+    subtitle.setPosition(800 / 2 - subtitle.getGlobalBounds().width / 2, 100);
     subtitle.setFillColor(sf::Color(70, 130, 180));
     window.draw(subtitle);
 
-    sf::Text playAgain("Play Again?", font, 48);
-    playAgain.setPosition(800 / 2 - playAgain.getGlobalBounds().width / 2, 280);
+    sf::Text playAgain("Try Again?", font, 40);
+    playAgain.setPosition(20, 500);
     playAgain.setFillColor(sf::Color(52, 72, 97));
     window.draw(playAgain);
 
-    sf::Text easy("1. Easy", font, 36);
-    easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 380);
+    sf::Text easy("1. Easy", font, 40);
+    easy.setPosition(280, 500);
     easy.setFillColor(sf::Color(46, 139, 87));
     window.draw(easy);
 
-    sf::Text medium("2. Medium", font, 36);
-    medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 440);
+    sf::Text medium("2. Medium", font, 40);
+    medium.setPosition(430, 500);
+    ;
     medium.setFillColor(sf::Color(70, 130, 180));
     window.draw(medium);
 
-    sf::Text hard("3. Hard", font, 36);
-    hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 500);
+    sf::Text hard("3. Hard", font, 40);
+    hard.setPosition(650, 500);
     hard.setFillColor(sf::Color(178, 34, 34));
     window.draw(hard);
 }
@@ -283,32 +279,33 @@ void Game::drawLoseScreen(sf::RenderWindow &window)
     window.draw(background);
 
     sf::Text gameOver("Game Over!", font, 72);
-    gameOver.setPosition(800 / 2 - gameOver.getGlobalBounds().width / 2, 80);
+    gameOver.setPosition(800 / 2 - gameOver.getGlobalBounds().width / 2, 20);
     gameOver.setFillColor(sf::Color(178, 34, 34));
     window.draw(gameOver);
 
     sf::Text message("Better luck next time!", font, 36);
-    message.setPosition(800 / 2 - message.getGlobalBounds().width / 2, 180);
+    message.setPosition(800 / 2 - message.getGlobalBounds().width / 2, 100);
     message.setFillColor(sf::Color(70, 130, 180));
     window.draw(message);
 
-    sf::Text playAgain("Try Again?", font, 48);
-    playAgain.setPosition(800 / 2 - playAgain.getGlobalBounds().width / 2, 280);
+    sf::Text playAgain("Try Again?", font, 40);
+    playAgain.setPosition(20, 500);
     playAgain.setFillColor(sf::Color(52, 72, 97));
     window.draw(playAgain);
 
-    sf::Text easy("1. Easy", font, 36);
-    easy.setPosition(800 / 2 - easy.getGlobalBounds().width / 2, 380);
+    sf::Text easy("1. Easy", font, 40);
+    easy.setPosition(280, 500);
     easy.setFillColor(sf::Color(46, 139, 87));
     window.draw(easy);
 
-    sf::Text medium("2. Medium", font, 36);
-    medium.setPosition(800 / 2 - medium.getGlobalBounds().width / 2, 440);
+    sf::Text medium("2. Medium", font, 40);
+    medium.setPosition(430, 500);
+    ;
     medium.setFillColor(sf::Color(70, 130, 180));
     window.draw(medium);
 
-    sf::Text hard("3. Hard", font, 36);
-    hard.setPosition(800 / 2 - hard.getGlobalBounds().width / 2, 500);
+    sf::Text hard("3. Hard", font, 40);
+    hard.setPosition(650, 500);
     hard.setFillColor(sf::Color(178, 34, 34));
     window.draw(hard);
 }
@@ -407,21 +404,55 @@ void Game::addHighScore(int score, sf::Time playTime)
 
 void Game::drawHighScores(sf::RenderWindow &window)
 {
+    // Title section
+    sf::RectangleShape titleBar(sf::Vector2f(300, 60));
+    titleBar.setFillColor(sf::Color(70, 130, 180, 230));
+    titleBar.setPosition(250, 200);
+    titleBar.setOutlineThickness(2);
+    titleBar.setOutlineColor(sf::Color(52, 72, 97));
+    window.draw(titleBar);
 
-    sf::Text title("High Scores", font, 50);
-    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 100);
-    title.setFillColor(sf::Color(52, 72, 97, 255));
+    sf::Text title("High Scores", font, 40);
+    title.setPosition(800 / 2 - title.getGlobalBounds().width / 2, 210);
+    title.setFillColor(sf::Color::White);
     window.draw(title);
+
+    // Scores section
+    sf::RectangleShape scoreBox(sf::Vector2f(400, 200));
+    scoreBox.setFillColor(sf::Color(240, 248, 255, 230));
+    scoreBox.setPosition(200, 280);
+    scoreBox.setOutlineThickness(2);
+    scoreBox.setOutlineColor(sf::Color(70, 130, 180));
+    window.draw(scoreBox);
 
     for (int i = 0; i < highScores.size(); ++i)
     {
-        std::ostringstream highScoreText;
-        highScoreText << "Top " << i + 1 << ": " << highScores[i].score << " - " << round(highScores[i].playTime.asSeconds()) << "s";
+        // Medal colors for top 3
+        sf::Color scoreColor;
+        switch (i)
+        {
+        case 0:
+            scoreColor = sf::Color(255, 215, 0);
+            break; // Gold
+        case 1:
+            scoreColor = sf::Color(192, 192, 192);
+            break; // Silver
+        case 2:
+            scoreColor = sf::Color(205, 127, 50);
+            break; // Bronze
+        default:
+            scoreColor = sf::Color(52, 72, 97);
+            break;
+        }
 
-        sf::Text highScore(highScoreText.str(), font, 30);
-        highScore.setFillColor(sf::Color(52, 72, 97, 255));
-        highScore.setPosition(800 / 2 - highScore.getGlobalBounds().width / 2, 200 + i * 50);
-        window.draw(highScore);
+        std::ostringstream scoreStream;
+        scoreStream << "#" << i + 1 << "  Score: " << highScores[i].score
+                    << "  Time: " << (int)highScores[i].playTime.asSeconds() << "s";
+
+        sf::Text scoreText(scoreStream.str(), font, 28);
+        scoreText.setFillColor(scoreColor);
+        scoreText.setPosition(220, 300 + i * 60);
+        window.draw(scoreText);
     }
 }
 

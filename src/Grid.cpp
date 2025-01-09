@@ -14,6 +14,7 @@ Grid::Grid()
 
 bool Grid::fillGrid()
 {
+
     for (int row = 0; row < 9; ++row)
     {
         for (int col = 0; col < 9; ++col)
@@ -48,6 +49,14 @@ bool Grid::fillGrid()
 
 void Grid::generate(int cellsToRemove)
 {
+
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            grid[i][j] = 0;
+        }
+    }
 
     fillGrid();
 
