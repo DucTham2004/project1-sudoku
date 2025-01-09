@@ -15,6 +15,13 @@ void Game::run()
     sf::RenderWindow window(sf::VideoMode(800, 600), "Sudoku");
     state = StartScreen;
 
+    sf::Image icon;
+    if (!icon.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/images/images.jpg"))
+    {
+        std::cerr << "Failed to load icon!" << std::endl;
+    }
+
+    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     while (window.isOpen())
     {
         sf::Event event;
@@ -37,21 +44,21 @@ void Game::run()
             {
                 if (event.key.code == sf::Keyboard::Num1)
                 {
-                    grid.generate(3);
+                    grid.generate(20);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
-                    grid.generate(4);
+                    grid.generate(40);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
-                    grid.generate(6);
+                    grid.generate(60);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;
@@ -89,21 +96,21 @@ void Game::run()
             {
                 if (event.key.code == sf::Keyboard::Num1)
                 {
-                    grid.generate(3);
+                    grid.generate(20);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
-                    grid.generate(4);
+                    grid.generate(40);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
-                    grid.generate(6);
+                    grid.generate(60);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;
@@ -113,21 +120,21 @@ void Game::run()
             {
                 if (event.key.code == sf::Keyboard::Num1)
                 {
-                    grid.generate(3);
+                    grid.generate(20);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num2)
                 {
-                    grid.generate(4);
+                    grid.generate(40);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;
                 }
                 else if (event.key.code == sf::Keyboard::Num3)
                 {
-                    grid.generate(6);
+                    grid.generate(60);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;

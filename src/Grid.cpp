@@ -119,50 +119,52 @@ bool Grid::isSafe(int row, int col, int num)
 
 void Grid::draw(sf::RenderWindow &window)
 {
-    sf::RectangleShape cell(sf::Vector2f(50, 50));
-    cell.setFillColor(sf::Color::White);
-    cell.setOutlineColor(sf::Color(52, 72, 97, 255));
-    cell.setOutlineThickness(1);
+    const float CELL_SIZE = 50.0f;
+    const float GRID_SIZE = CELL_SIZE * 9;
+    const float offsetX = (800 - GRID_SIZE) / 2;
+    const float offsetY = (600 - GRID_SIZE) / 2;
 
-    float offsetX = (800 - 450) / 2;
-    float offsetY = (600 - 450) / 2;
+    const sf::Color BORDER_COLOR(52, 72, 97, 255);
+    const sf::Color SELECTED_COLOR(187, 222, 251, 255);
+    const sf::Color HIGHLIGHT_COLOR(195, 215, 234, 255);
+    const sf::Color LIGHT_HIGHLIGHT_COLOR(226, 235, 243, 255);
+    const sf::Color ERROR_COLOR(255, 99, 71, 200);
+    const sf::Color NUMBER_COLOR(52, 72, 97, 255);
+    const sf::Color EDITABLE_NUMBER_COLOR(65, 105, 225);
+    const sf::Color ERROR_NUMBER_COLOR(220, 20, 60);
+
+    sf::RectangleShape cell(sf::Vector2f(CELL_SIZE, CELL_SIZE));
+    cell.setOutlineColor(BORDER_COLOR);
+    cell.setOutlineThickness(1);
 
     for (int i = 0; i < 9; ++i)
     {
         for (int j = 0; j < 9; ++j)
         {
-
-            cell.setPosition(offsetX + j * 50, offsetY + i * 50);
+            cell.setPosition(offsetX + j * CELL_SIZE, offsetY + i * CELL_SIZE);
 
             if (i == selectedRow && j == selectedCol)
             {
-                cell.setFillColor(sf::Color(187, 222, 251, 255));
+                cell.setFillColor(SELECTED_COLOR);
             }
-            else if (selectedRow != -1 && selectedCol != -1 && grid[i][j] == grid[selectedRow][selectedCol] && grid[selectedRow][selectedCol] != 0)
+            else if (selectedRow != -1 && selectedCol != -1 &&
+                     grid[i][j] == grid[selectedRow][selectedCol] &&
+                     grid[selectedRow][selectedCol] != 0)
             {
-                if (i == selectedRow || j == selectedCol || (i / 3 == selectedRow / 3 && j / 3 == selectedCol / 3))
+                if (i == selectedRow || j == selectedCol ||
+                    (i / 3 == selectedRow / 3 && j / 3 == selectedCol / 3))
                 {
-                    if (!isSafe(selectedRow, selectedCol, grid[selectedRow][selectedCol]))
-                    {
-                        cell.setFillColor(sf::Color(247, 207, 214, 255));
-                    }
-                    else
-                    {
-                        cell.setFillColor(sf::Color(195, 215, 234, 255));
-                    }
+                    cell.setFillColor(!isSafe(selectedRow, selectedCol, grid[selectedRow][selectedCol]) ? ERROR_COLOR : HIGHLIGHT_COLOR);
                 }
                 else
                 {
-                    cell.setFillColor(sf::Color(195, 215, 234, 255));
+                    cell.setFillColor(HIGHLIGHT_COLOR);
                 }
             }
-            else if (i == selectedRow || j == selectedCol)
+            else if (i == selectedRow || j == selectedCol ||
+                     (i / 3 == selectedRow / 3 && j / 3 == selectedCol / 3))
             {
-                cell.setFillColor(sf::Color(226, 235, 243, 255));
-            }
-            else if (i / 3 == selectedRow / 3 && j / 3 == selectedCol / 3)
-            {
-                cell.setFillColor(sf::Color(226, 235, 243, 255));
+                cell.setFillColor(LIGHT_HIGHLIGHT_COLOR);
             }
             else
             {
@@ -173,65 +175,48 @@ void Grid::draw(sf::RenderWindow &window)
 
             if (grid[i][j] != 0)
             {
+                sf::Text number(std::to_string(grid[i][j]), font, 36);
+                number.setPosition(offsetX + j * CELL_SIZE + 15, offsetY + i * CELL_SIZE + 6);
+
                 if (!isEditable[i][j])
                 {
-                    sf::Text number(std::to_string(grid[i][j]), font, 36);
-                    number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6);
-                    number.setFillColor(sf::Color(52, 72, 97, 255));
-                    window.draw(number);
+                    number.setFillColor(NUMBER_COLOR);
                 }
                 else
                 {
-                    if (isSafe(i, j, grid[i][j]))
-                    {
-                        sf::Text number(std::to_string(grid[i][j]), font, 36);
-                        number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6);
-                        number.setFillColor(sf::Color::Blue);
-                        window.draw(number);
-                    }
-                    else
-                    {
-                        sf::Text number(std::to_string(grid[i][j]), font, 36);
-                        number.setPosition(offsetX + j * 50 + 15, offsetY + i * 50 + 6);
-                        number.setFillColor(sf::Color::Red);
-                        window.draw(number);
-                    }
+                    number.setFillColor(isSafe(i, j, grid[i][j]) ? EDITABLE_NUMBER_COLOR : ERROR_NUMBER_COLOR);
                 }
+                window.draw(number);
             }
-            else
+            else if (!notes[i][j].empty())
             {
                 for (int note : notes[i][j])
                 {
-                    sf::Text number(std::to_string(note), font, 12);
-                    number.setPosition(offsetX + j * 50 + 5 + (note - 1) % 3 * 15, offsetY + i * 50 + 5 + (note - 1) / 3 * 15);
-                    number.setFillColor(sf::Color::Black);
-                    window.draw(number);
+                    sf::Text noteText(std::to_string(note), font, 12);
+                    noteText.setPosition(offsetX + j * CELL_SIZE + 5 + ((note - 1) % 3) * 15,
+                                         offsetY + i * CELL_SIZE + 5 + ((note - 1) / 3) * 15);
+                    noteText.setFillColor(sf::Color(100, 100, 100));
+                    window.draw(noteText);
                 }
             }
         }
     }
 
-    sf::RectangleShape lineRow(sf::Vector2f(450, 3));
-    lineRow.setFillColor(sf::Color(77, 94, 116, 255));
     for (int i = 0; i <= 9; ++i)
     {
         if (i % 3 == 0)
         {
 
-            lineRow.setPosition(offsetX, offsetY + i * 50);
-            window.draw(lineRow);
-        }
-    }
+            sf::RectangleShape thickLine;
+            thickLine.setFillColor(BORDER_COLOR);
 
-    sf::RectangleShape lineCol(sf::Vector2f(3, 450));
-    lineCol.setFillColor(sf::Color(77, 94, 116, 255));
-    for (int i = 0; i <= 9; ++i)
-    {
-        if (i % 3 == 0)
-        {
+            thickLine.setSize(sf::Vector2f(GRID_SIZE, 3));
+            thickLine.setPosition(offsetX, offsetY + i * CELL_SIZE);
+            window.draw(thickLine);
 
-            lineCol.setPosition(offsetX + i * 50, offsetY);
-            window.draw(lineCol);
+            thickLine.setSize(sf::Vector2f(3, GRID_SIZE));
+            thickLine.setPosition(offsetX + i * CELL_SIZE, offsetY);
+            window.draw(thickLine);
         }
     }
 }
