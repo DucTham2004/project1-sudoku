@@ -5,11 +5,7 @@ Grid::Grid()
     : grid(9, std::vector<int>(9, 0)),
       isEditable(9, std::vector<bool>(9, false))
 {
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
-    {
-        std::cerr << "Failed to load font!" << std::endl;
-        return;
-    }
+    font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf");
 }
 
 bool Grid::fillGrid()

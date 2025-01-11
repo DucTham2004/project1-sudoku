@@ -3,11 +3,7 @@
 Game::Game() : state(StartScreen), totalPausedTime(sf::Time::Zero)
 {
     loadHighScoresFromFile();
-    if (!font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf"))
-    {
-        std::cerr << "Failed to load font!" << std::endl;
-        return;
-    }
+    font.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/fonts/Roboto-Medium.ttf");
 }
 
 void Game::run()
@@ -16,15 +12,13 @@ void Game::run()
     state = StartScreen;
 
     sf::Image icon;
-    if (!icon.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/images/images.jpg"))
-    {
-        std::cerr << "Failed to load icon!" << std::endl;
-    }
-
+    icon.loadFromFile("E:/project1_sudoku/project1-sudoku/assets/images/images.jpg");
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
+    sf::Event event;
     while (window.isOpen())
     {
-        sf::Event event;
+
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -44,7 +38,7 @@ void Game::run()
             {
                 if (event.key.code == sf::Keyboard::Num1)
                 {
-                    grid.generate(20);
+                    grid.generate(1);
                     gameClock.restart();
                     totalPausedTime = sf::Time::Zero;
                     state = Playing;
@@ -64,33 +58,43 @@ void Game::run()
                     state = Playing;
                 }
             }
-            else if (state == Playing && grid.checkWin())
+            else if (state == Playing)
             {
-                state = CongratulationScreen;
-                grid.numberError = 0;
-                grid.selectedCol = -1;
-                grid.selectedRow = -1;
-                addHighScore(grid.currentScore, elapsedTime);
-                grid.currentScore = 0;
+                if (grid.checkWin())
+                {
+                    state = CongratulationScreen;
+                    grid.numberError = 0;
+                    grid.selectedCol = -1;
+                    grid.selectedRow = -1;
+                    addHighScore(grid.currentScore, elapsedTime);
+                    grid.currentScore = 0;
+                }
+                else if (grid.checkLose())
+                {
+                    state = LoseScreen;
+                    grid.numberError = 0;
+                    grid.selectedCol = -1;
+                    grid.selectedRow = -1;
+                    addHighScore(grid.currentScore, elapsedTime);
+                    grid.currentScore = 0;
+                }
+                else if (event.type == sf::Event::KeyPressed)
+                {
+                    if (event.key.code == sf::Keyboard::P)
+                    {
+                        pauseStartTime = gameClock.getElapsedTime();
+                        state = Pause;
+                    }
+                }
             }
-            else if (state == Playing && grid.checkLose())
+
+            else if (state == Pause && event.type == sf::Event::KeyPressed)
             {
-                state = LoseScreen;
-                grid.numberError = 0;
-                grid.selectedCol = -1;
-                grid.selectedRow = -1;
-                addHighScore(grid.currentScore, elapsedTime);
-                grid.currentScore = 0;
-            }
-            else if (state == Playing && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
-            {
-                pauseStartTime = gameClock.getElapsedTime();
-                state = Pause;
-            }
-            else if (state == Pause && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
-            {
-                totalPausedTime += gameClock.getElapsedTime() - pauseStartTime;
-                state = Playing;
+                if (event.key.code == sf::Keyboard::P)
+                {
+                    totalPausedTime += gameClock.getElapsedTime() - pauseStartTime;
+                    state = Playing;
+                }
             }
             else if (state == CongratulationScreen && event.type == sf::Event::KeyPressed)
             {
@@ -141,6 +145,8 @@ void Game::run()
                 }
             }
         }
+
+        sf::sleep(sf::milliseconds(30));
 
         window.clear(sf::Color::White);
 
@@ -411,7 +417,7 @@ void Game::addHighScore(int score, sf::Time playTime)
 
 void Game::drawHighScores(sf::RenderWindow &window)
 {
-    // Title section
+
     sf::RectangleShape titleBar(sf::Vector2f(300, 60));
     titleBar.setFillColor(sf::Color(70, 130, 180, 230));
     titleBar.setPosition(250, 200);
@@ -424,7 +430,6 @@ void Game::drawHighScores(sf::RenderWindow &window)
     title.setFillColor(sf::Color::White);
     window.draw(title);
 
-    // Scores section
     sf::RectangleShape scoreBox(sf::Vector2f(400, 200));
     scoreBox.setFillColor(sf::Color(240, 248, 255, 230));
     scoreBox.setPosition(200, 280);
@@ -434,19 +439,18 @@ void Game::drawHighScores(sf::RenderWindow &window)
 
     for (int i = 0; i < highScores.size(); ++i)
     {
-        // Medal colors for top 3
         sf::Color scoreColor;
         switch (i)
         {
         case 0:
             scoreColor = sf::Color(255, 215, 0);
-            break; // Gold
+            break;
         case 1:
             scoreColor = sf::Color(192, 192, 192);
-            break; // Silver
+            break;
         case 2:
             scoreColor = sf::Color(205, 127, 50);
-            break; // Bronze
+            break;
         default:
             scoreColor = sf::Color(52, 72, 97);
             break;
@@ -505,29 +509,25 @@ void Game::loadHighScoresFromFile()
 
 void Game::drawShortcutKey(sf::RenderWindow &window)
 {
-    // Create background box
+
     sf::RectangleShape background(sf::Vector2f(600, 40));
     background.setFillColor(sf::Color(70, 130, 180, 200));
     background.setPosition(100, 545);
     background.setOutlineThickness(2);
     background.setOutlineColor(sf::Color(52, 72, 97));
 
-    // Create individual shortcut texts
     sf::Text noteText("N: Note", font, 24);
     sf::Text pauseText("P: Pause", font, 24);
     sf::Text deleteText("Backspace: Delete", font, 24);
 
-    // Set text colors
     noteText.setFillColor(sf::Color::White);
     pauseText.setFillColor(sf::Color::White);
     deleteText.setFillColor(sf::Color::White);
 
-    // Position texts evenly
     noteText.setPosition(150, 550);
     pauseText.setPosition(350, 550);
     deleteText.setPosition(500, 550);
 
-    // Draw everything
     window.draw(background);
     window.draw(noteText);
     window.draw(pauseText);
